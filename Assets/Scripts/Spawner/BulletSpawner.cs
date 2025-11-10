@@ -14,19 +14,12 @@ public class BulletSpawner : MonoBehaviour
     [SerializeField] private Transform _container;
     [SerializeField] private float _shootingPauseSeconds;
     [SerializeField] private List<Target> _targets;
-
-    private Queue<Target> _targetsQueue = new Queue<Target>();
     private Target _currentTarget;
 
     private IObjectPool<Bullet> _bulletsPool;
 
     private void Awake()
-    {
-        foreach (var target in _targets)
-            _targetsQueue.Enqueue(target);
-        
-        _bulletsPool = new ObjectPool<Bullet>(OnPoolCreate, OnPoolGet, OnPoolRelease, OnPoolDestroy);
-    }
+        => _bulletsPool = new ObjectPool<Bullet>(OnPoolCreate, OnPoolGet, OnPoolRelease, OnPoolDestroy);
 
     private void Start()
         => StartCoroutine(Spawn());
@@ -70,8 +63,11 @@ public class BulletSpawner : MonoBehaviour
         if (_currentTarget != null)
             _currentTarget.Destroyed -= SetNewTarget;
 
-        if (_targetsQueue.Count != 0)
-            _currentTarget = _targetsQueue.Dequeue();
+        if (_targets.Count != 0)
+        {
+            _currentTarget = _targets[0];
+            _targets.Remove(_currentTarget);
+        }
 
         _currentTarget.Destroyed += SetNewTarget;
     }

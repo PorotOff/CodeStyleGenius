@@ -917,7 +917,7 @@ MonoBehaviour:
   _impulseForce: 100
   _destroyTimeSeconds: 2
   _container: {fileID: 1967882611}
-  _shootingPauseSeconds: 1.5
+  _shootingPauseSeconds: 0.1
   _targets:
   - {fileID: 5239142487884070588}
   - {fileID: 182190593}
