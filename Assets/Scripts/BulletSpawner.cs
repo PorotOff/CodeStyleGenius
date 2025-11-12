@@ -4,7 +4,7 @@ using UnityEngine;
 public class BulletSpawner : MonoBehaviour
 {
     [SerializeField] private float _impulseForce;
-    [SerializeField] private GameObject _bulletPrefab;
+    [SerializeField] private Bullet _bulletPrefab;
     [SerializeField] private float _spawnInterval;
     [SerializeField] private Transform _target;
 
@@ -18,11 +18,10 @@ public class BulletSpawner : MonoBehaviour
         while (enabled)
         {
             Vector3 direction = (_target.position - transform.position).normalized;
-            Vector3 velocity = direction * _impulseForce;
-            GameObject bullet = Instantiate(_bulletPrefab, transform.position + direction, Quaternion.identity);
+            Vector3 impulseForce = direction * _impulseForce;
 
-            bullet.transform.up = direction;
-            bullet.GetComponent<Rigidbody>().velocity = velocity;
+            Bullet bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
+            bullet.Initialize(_target.position, impulseForce);
 
             yield return wait;
         }
